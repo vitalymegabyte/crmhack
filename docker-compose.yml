@@ -10,3 +10,4 @@ services:
     build: ./bot
     volumes:
       - ./bot:/app
+    env_file: .env
