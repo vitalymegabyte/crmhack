@@ -1,0 +1,25 @@
+image: docker:latest
+
+services:
+    - docker:dind
+
+stages:
+    - test
+  
+variables:
+    GIT_DEPTH: "1"
+    GIT_STRATEGY: clone
+    GIT_SUBMODULE_STRATEGY: none
+
+    # TAG and IMAGE are used by docker-compose.yml.
+    TAG: latest
+    IMAGE: vitalymegabyte/crmhack
+  
+    # Is used by docker-compose.yml.
+    SOLUTION_PATH: ../$CI_PROJECT_NAME
+
+push:
+    before_script:
+        - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    script:    
+        - docker build -t registry.gitlab.com/vitalymegabyte/crmhack/${IMAGE}_backend:${TAG} ./flask
