@@ -1,4 +1,4 @@
-FROM python:3.6.12-alpine
+FROM python:3.9.6-alpine3.13
 
 RUN pip3 install --upgrade pip
 
