@@ -1,9 +1,6 @@
 from telegram.ext import Updater
-from telegram.ext import CommandHandler
-from telegram.ext import MessageHandler, Filters
 import os
 import logging
-from transformers import BertModel
 from handlers.command_handlers import start_handler
 from handlers.fast_command_handler import fast_command_handler
 from handlers.text_handler import text_handler
