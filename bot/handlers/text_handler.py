@@ -30,9 +30,9 @@ def _create_deal(update, context):
         sum = int(sum.group(0))
     deal = {'name': 'Сделка с ' + client['name'], 'company': client, 'sum': sum}
     request = requests.post('http://backend/deal/0', json=deal)
+    request = requests.post('http://backend/sessions/0', json={'classname': 'Deal'})
     fast_action = {'queries': [{'url': 'http://backend/deal/0', 'method': 'post', 'json': deal}], 'text': 'Сделка зарегистрирована!'}
     fast = requests.post('http://backend/fast/0', json=fast_action)
-    print(request.json(), flush=True)
     return 'Данные сделки:\n' + request.json()['str'] + '\nЗарегистрировать сделку: /fast' + fast.content.decode('utf-8')
 
 actions = ['Создай сделку']
