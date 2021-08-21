@@ -29,7 +29,8 @@ def client(client_id):
     else:
         data = request.json
         name = data['name']
-        id = Data.last_client_ID =+ 1
+        Data.last_client_ID += 1
+        id = Data.last_client_ID
         Data.clients[id] = Client(id, name)
         
 @app.route('/deal/<deal_id>', methods=['GET', 'POST'])
@@ -42,13 +43,12 @@ def deal(deal_id):
             return jsonify(deal)
     else:
         data = request.json
-        id = Data.last_deal_ID =+ 1
+        Data.last_deal_ID += 1
+        id = Data.last_deal_ID
         name = data['name']
         deal_id = data['deal_id']
         company = data['company']
-        Data.deals[id] = Deal.ID
-        Data.deals[name] = Deal.name
-        Data.deals[company] = Deal.company
+        Data.deals[Data.last_deal_ID] = Deal(id, name, company)
         
 @app.route('/contact/<contact_id>', methods=['GET', 'POST'])
 def contact(contact_id):
@@ -60,7 +60,7 @@ def contact(contact_id):
             return jsonify(contact)
     else:
         data = request.json
-        id = Data.last_contact_ID =+ 1
+        Data.last_contact_ID += 1
+        id = Data.last_contact_ID
         name = data['name']
-        Data.contacts[id] = Contact.ID
-        Data.contacts[name] = Contact.name
+        Data.contacts[Data.last_contact_ID] = Contact(id, name)
