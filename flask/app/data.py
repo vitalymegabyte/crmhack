@@ -67,12 +67,17 @@ class Data():
     last_client_ID = 0
     fast_commands = {}
     last_fast_commands_id = 0
-    keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Ответственное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+    keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Отвественное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+    last_session_id = 1
+    sessions = {}
+    user_sessions = {}
+
 
 class Session():
-    def __init__(self, className):
+    def __init__(self, className, id):
         self.className = className
         self.data = {}
+        self.id = id
     
     def not_used_data(self):
         not_used = Data.keywords.keys()

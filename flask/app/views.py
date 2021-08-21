@@ -1,10 +1,11 @@
 from operator import methodcaller
 from os import name
 from flask import request, jsonify
+from requests.sessions import Request, session
 from app import app
 from app import data
 from utils import getObjectsFromText
-from data import Client, Contact, Data, Deal
+from data import Client, Contact, Data, Deal, Session
 
 @app.route('/')
 def home():
@@ -82,6 +83,33 @@ def fast(id):
     else:
         Data.last_fast_commands_id += 1
         Data.fast_commands[Data.last_fast_commands_id] = request.json
-        print('json', request.json)
-        print(Data.fast_commands)
         return str(Data.last_fast_commands_id)
+
+@app.route('/sessions/<id>', methods=['GET', 'POST'])
+def fast(id):
+    if request.method == 'GET':
+        client = Data.last_session_id[id]
+        if client is None:
+            return 404, ""
+        else:
+            arr = client.not_used_data()        
+            return jsonify(arr)
+    else:
+        if id in Data.sessions:
+            if request.json['name'] == 'closed':
+                del Data.user_sessions[request.json['telegram_id']]
+            else:
+                property = request.json
+                Data.sessions[id][property['name']] = property['value']
+        else:
+            Data.last_session_id +=1
+            Data.sessions[Data.last_session_id] = Session(request.json['classname'], id)
+            Data.user_sessions[request.json['telegram_id']] = Data.sessions[Data.last_session_id]
+            return Data.last_session_id
+
+@app.route('/sessions/<id>', methods=['GET'])
+def activity(id):
+    if id in Data.sessions: 
+        return 'Active'
+    else:
+        return 'Inactive'
