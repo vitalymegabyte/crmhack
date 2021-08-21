@@ -102,14 +102,16 @@ def sessions(id):
                 property = request.json
                 Data.sessions[id][property['name']] = property['value']
         else:
+            print('added session', flush=True)
             Data.last_session_id +=1
             Data.sessions[Data.last_session_id] = Session(request.json['classname'], id)
             Data.user_sessions[request.json['telegram_id']] = Data.sessions[Data.last_session_id]
-            return Data.last_session_id
+            return str(Data.last_session_id)
 
 @app.route('/user_sessions/<id>', methods=['GET'])
 def usser_sessions(id):
-    if id in Data.sessions: 
+    print(id)
+    if id in Data.user_sessions: 
         return 'Active'
     else:
         return 'Inactive'

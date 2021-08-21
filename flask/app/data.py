@@ -1,6 +1,3 @@
-from _typeshed import Self
-from flask.app.views import deal
-from os import remove
 import re
 from pymorphy2 import utils
 from utils import lemmatize_text
