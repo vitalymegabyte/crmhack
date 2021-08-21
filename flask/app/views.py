@@ -66,7 +66,7 @@ def contact(contact_id):
         Data.contacts[Data.last_contact_ID] = Contact(id, name)
 
 @app.route('/fast/<id>', methods=['GET', 'POST'])
-def client(id):
+def fast(id):
     if request.method == 'GET':
         client = Data.fast_commands(id)
         if client is None:
