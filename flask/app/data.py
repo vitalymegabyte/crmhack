@@ -2,11 +2,11 @@ from pymorphy2 import utils
 from utils import lemmatize_text
 
 class Deal():
-    def __init__(self, ID, name, dealID, company, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
-        self.ID = ID
+    def __init__(self, id, name, deal_id, company, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
+        self.ID = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
-        self.dealID = dealID
+        self.dealID = deal_id
         self.stonksNDS = stonksNDS
         self.stonks = stonks
         self.status = status
@@ -24,8 +24,8 @@ class Deal():
 
 
 class Client():
-    def __init__(self, ID, name):
-        self.ID = ID
+    def __init__(self, id, name):
+        self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
 
@@ -44,4 +44,3 @@ class Data():
     last_contact_ID = 0
     last_deal_ID = 0
     last_client_ID = 0
-    
