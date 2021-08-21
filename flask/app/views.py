@@ -111,6 +111,7 @@ def sessions(id):
 @app.route('/user_sessions/<id>', methods=['GET'])
 def usser_sessions(id):
     print(id)
+    print(Data.user_sessions)
     if id in Data.user_sessions: 
         return 'Active'
     else:
