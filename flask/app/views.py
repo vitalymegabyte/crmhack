@@ -94,10 +94,20 @@ def fast(id):
             return jsonify(arr)
     else:
         if id in Data.sessions:
-            property = request.json
-            Data.sessions[id][property['name']] = property['value']
-        else: 
-            Session(request.json['classname'])
+            if request.json['name'] == 'closed':
+                del Data.user_sessions[request.json['telegram_id']]
+            else:
+                property = request.json
+                Data.sessions[id][property['name']] = property['value']
+        else:
             Data.last_session_id +=1
-            Data.sessions[Data.last_session_id] = Session(request.json['classname'])
+            Data.sessions[Data.last_session_id] = Session(request.json['classname'], id)
+            Data.user_sessions[request.json['telegram_id']] = Data.sessions[Data.last_session_id]
             return Data.last_session_id
+
+@app.route('/sessions/<id>', methods=['GET'])
+def activity(id):
+    if id in Data.sessions: 
+        return 'Active'
+    else:
+        return 'Inactive'
