@@ -1,3 +1,4 @@
+from os import remove
 from pymorphy2 import utils
 from utils import lemmatize_text
 
@@ -67,6 +68,20 @@ class Data():
     fast_commands = {}
     last_fast_commands_id = 0
     keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Ответственное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+
+class Session():
+    def __init__(self, className):
+        self.className = className
+        self.data = {}
+    
+    def not_used_data(self):
+        not_used = Data.keywords.keys()
+        for key in self.data.keys():
+            if key in not_used.keys():
+                del not_used[key]
+        return not_used
+            
+
 
 
 Data.clients[Data.last_client_ID] = Client(Data.last_client_ID, 'T1 Консалтинг')
