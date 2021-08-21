@@ -3,14 +3,24 @@ from transformers import BertModel, BertTokenizer
 import torch
 import scipy.spatial.distance as ds
 import numpy as np
+import requests
 
 sbert = BertModel.from_pretrained('sberbank-ai/ruBert-base', output_attentions=False, output_hidden_states=False)
 sbert.eval()
 sbert_tokenizer = BertTokenizer.from_pretrained('sberbank-ai/ruBert-base')
 
-actions = ['Первое действие', 'Взять', 'Запушить']
+def _ping_backend(update, context):
+    r = requests.get('http://backend/')
+    return r.text
+
+def _create_deal(update, context):
+    user = update.message.from_user
+    r = requests.get('http://backend/get_clients/' + user['id'])
+
+actions = ['Пингануть бэкенд', 'Создай сделку']
 actions_tokenized = []
-action_answers = {'Первое действие': 'Действую', 'Взять': 'Беру', 'Запушить': 'Я тебе что, гитхаб?!'}
+action_answers = {'Пингануть бэкенд': _ping_backend, 'Создай сделку': _create_deal}
+
 
 def _sbert_tokenize_sentence(text):
     encoded_dict = sbert_tokenizer.encode_plus(
@@ -30,18 +40,19 @@ def _sbert_get_vector(input_ids):
 def get_vector(text):
     input_ids = _sbert_tokenize_sentence(text)
     vector = _sbert_get_vector(input_ids)
-    print(text, vector.shape)
     return vector
 
 def get_action(text):
     vector = get_vector(text)
     distances = [ds.cosine(action_embeddings, vector) for action_embeddings in actions_tokenized]
     index = np.argmin(distances)
-    return f'Текст: "{text}"\n\nПо смыслу наиболее близок к {actions[index]}\n\nПолный список распознаваемых сообщений: {actions}'
+    return index
 
 actions_tokenized = list(map(get_vector, actions))
 
 def text(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text=get_action(update.message.text))
+    index = get_action(update.message.text)
+    text = f'Текст: "{update.message.text}"\n\nПо смыслу наиболее близок к {actions[index]}\n\nПолный список распознаваемых сообщений: {actions}\n\nAnswer: {action_answers[actions[index]](update, context)}'
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 text_handler = MessageHandler(Filters.text & (~Filters.command), text)

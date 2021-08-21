@@ -1,5 +1,6 @@
 FROM huggingface/transformers-pytorch-cpu
 
+ENV LANG C.UTF-8
 RUN pip3 install --upgrade pip
 RUN pip3 install setuptools_rust
 
@@ -9,4 +10,4 @@ RUN pip3 install -r /requirements.txt
 COPY . /app
 WORKDIR /app
 
-ENTRYPOINT ["./run_bot.sh"]
+ENTRYPOINT ["/usr/bin/python3", "bot.py"]
