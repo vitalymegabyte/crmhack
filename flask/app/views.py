@@ -15,7 +15,7 @@ def get_clients(client_id):
     data = request.json
     text = data['text']
     clients_got = getObjectsFromText(text, Data.clients.values())
-    clients_got = list(filter(lambda c: c.normalized_name, clients_got))
+    clients_got = list(map(lambda obj: obj.__dict__(), clients_got))
     return jsonify(clients_got)
 
 @app.route('/client/<client_id>', methods=['GET', 'POST'])
