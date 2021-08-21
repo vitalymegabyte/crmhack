@@ -32,7 +32,7 @@ def _create_deal(update, context):
     request = requests.post('http://backend/deal/0', json=deal)
     fast_action = {'queries': {'url': 'http://backend/deal/0', 'method': 'post', 'json': deal}, 'text': 'Сделка зарегистрирована!'}
     fast = requests.post('http://backend/fast/0', json=fast_action)
-    return 'Зарегистрировать сделку: /fast' + str(fast.content)
+    return 'Зарегистрировать сделку: /fast' + fast.content.decode('utf-8')
 
 actions = ['Создай сделку']
 actions_tokenized = []

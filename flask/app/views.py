@@ -70,6 +70,7 @@ def contact(contact_id):
 
 @app.route('/fast/<id>', methods=['GET', 'POST'])
 def fast(id):
+    id = int(id)
     print('fast', flush=True)
     if request.method == 'GET':
         client = Data.fast_commands[id]
@@ -78,7 +79,6 @@ def fast(id):
         else:
             return jsonify(client.get_dict())
     else:
-        print(request.json, flush=True)
         Data.last_fast_commands_id += 1
         Data.fast_commands[Data.last_fast_commands_id] = request.json
         return str(Data.last_fast_commands_id)

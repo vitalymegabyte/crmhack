@@ -66,7 +66,7 @@ class Data():
     last_client_ID = 0
     fast_commands = {}
     last_fast_commands_id = 0
-    keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Отвественное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+    keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Ответственное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
 
 
 Data.clients[Data.last_client_ID] = Client(Data.last_client_ID, 'T1 Консалтинг')
