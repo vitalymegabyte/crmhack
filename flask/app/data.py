@@ -23,7 +23,13 @@ class Deal():
         self.NDS = NDS
 
     def __dict__(self):
-        return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company}
+        return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company, 'str': str(self)}
+
+    def __str__(self):
+        ret = self.name + "\n"
+        ret = ret + 'Компания: ' + self.company + "\n"
+        if self.stonks is not None: ret = ret + "Сумма: " + self.stonks
+        return ret
 
 
 class Client():
@@ -33,7 +39,10 @@ class Client():
         self.normalized_name = lemmatize_text(name)
     
     def __dict__(self):
-        return {'id': self.id, 'name': self.name}
+        return {'id': self.id, 'name': self.name, 'str': str(self)}
+
+    def __str__(self):
+        return self.name
 
 class Contact():
     def __init__(self, id, name, phone_number=None, email=None):
