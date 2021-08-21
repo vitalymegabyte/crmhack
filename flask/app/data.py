@@ -2,7 +2,7 @@ from pymorphy2 import utils
 from utils import lemmatize_text
 
 class Deal():
-    def __init__(self, id, name, deal_id, company, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
+    def __init__(self, id, name, deal_id, company, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency="у.е.", type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
         self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
