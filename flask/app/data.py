@@ -1,9 +1,10 @@
 from os import remove
+import re
 from pymorphy2 import utils
 from utils import lemmatize_text
 
 class Deal():
-    def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency="у.е.", type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
+    def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
         self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
@@ -27,9 +28,24 @@ class Deal():
         return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company, 'str': str(self)}
 
     def __str__(self):
-        ret = self.name + "\n"
-        ret = ret + 'Компания: ' + str(self.company) + "\n"
-        if self.stonks is not None: ret = ret + "Сумма: " + str(self.stonks)
+        ret = "Сделка: **\"" + self.name + "\"**\n"
+        if self.status == True:
+            ret = ret + "Статус: закрыта ✅\n\n"
+        else:
+            ret = ret + "Статус: закрыта ⏰\n\n"
+        ret = ret + "Компания: **\"" + self.company + "\"**\n"
+        if self.type is not None: ret = ret + self.type
+        if self.orderer is not None: ret = ret + "Конечный заказчик: " + self.orderer + "\"\n"
+        if self.stonksNDS is not None: ret = ret + "Ожидаемая прибыль с НДС: **" + self.stonksNDS + " " + self.currency + "**\n"
+        if self.currency is not None: ret = ret + " " + self.currency + "**\n"
+        else: "**\n"
+        if self.stonks is not None: ret = ret + "Ожидаемая прибыль без НДС: " + self.stonks
+        if self.currency is not None: ret = ret + " " + self.currency + "**\n"
+        else: "**\n"
+        if self.probability is not None: ret = ret + "Вероятность продавца: " + self.probability + "\n"
+        if self.marja is not None: ret = ret + "Оценочная маржинальность: " + self.marja + "\n"
+        if self.date is not None: ret = ret + "Вероятная дата заключения: **" + self.date + "**\n\n"
+        if self.responcible is not None: ret = ret + "Ответственное лицо: **" + self.responcible + "**"
         return ret
 
 
