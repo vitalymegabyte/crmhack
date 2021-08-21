@@ -3,10 +3,10 @@ from utils import lemmatize_text
 
 class Deal():
     def __init__(self, id, name, deal_id, company, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
-        self.ID = id
+        self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
-        self.dealID = deal_id
+        self.deal_id = deal_id
         self.stonksNDS = stonksNDS
         self.stonks = stonks
         self.status = status
@@ -21,8 +21,9 @@ class Deal():
         self.CK = CK #ЦК Сделки
         self.marja = marja
         self.NDS = NDS
+
     def __dict__(self):
-        return {'name': self.name}
+        return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company}
 
 
 class Client():
@@ -30,14 +31,20 @@ class Client():
         self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
+    
+    def __dict__(self):
+        return {'id': self.id, 'name': self.name}
 
 class Contact():
-    def __init__(self, ID, name, phone_number, email):
-        self.ID = ID
+    def __init__(self, id, name, phone_number=None, email=None):
+        self.id = id
         self.name = name
         self.phone_number = phone_number
         self.email = email
         self.normalized_name = lemmatize_text(name)
+
+    def __dict__(self):
+        return {'id': self.id, 'name': self.name}
 
 class Data():
     clients = {}
