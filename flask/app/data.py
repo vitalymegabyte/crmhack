@@ -89,5 +89,7 @@ class Session():
 
 
 
-Data.clients[Data.last_client_ID] = Client(Data.last_client_ID, 'T1 Консалтинг')
+Data.clients[Data.last_client_ID] = Client(Data.last_client_ID, 'ООО Ромашка')
+Data.last_client_ID += 1
+Data.clients[Data.last_client_ID] = Client(Data.last_client_ID, 'Кот Inc')
 Data.last_client_ID += 1

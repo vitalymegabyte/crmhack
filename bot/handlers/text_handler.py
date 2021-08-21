@@ -30,9 +30,9 @@ def _create_deal(update, context):
         sum = int(sum.group(0))
     deal = {'name': 'Сделка с ' + client['name'], 'company': client, 'sum': sum}
     request = requests.post('http://backend/deal/0', json=deal)
-    fast_action = {'queries': {'url': 'http://backend/deal/0', 'method': 'post', 'json': deal}, 'text': 'Сделка зарегистрирована!'}
+    fast_action = {'queries': [{'url': 'http://backend/deal/0', 'method': 'post', 'json': deal}], 'text': 'Сделка зарегистрирована!'}
     fast = requests.post('http://backend/fast/0', json=fast_action)
-    return 'Зарегистрировать сделку: /fast' + fast.content.decode('utf-8')
+    return 'Данные сделки:\n' + request.json()['str'] + '\nЗарегистрировать сделку: /fast' + fast.content.decode('utf-8')
 
 actions = ['Создай сделку']
 actions_tokenized = []
@@ -68,11 +68,16 @@ def get_action(text):
 actions_tokenized = list(map(get_vector, actions))
 
 def text(update, context):
-    index, distance = get_action(update.message.text)
-    if distance >= 0.01 * (100 - confidence):
-        context.bot.send_message(chat_id=update.effective_chat.id, text='Действие не определено')
+    request = requests.get('http://backend/user_sessions/' + str(update.message.from_user.id))
+    active_sessions = request.content.decode('utf-8')
+    if active_sessions == 'Active':
+        pass
     else:
-        text = action_answers[actions[index]](update, context)
-        context.bot.send_message(chat_id=update.effective_chat.id, text=text + '\ndistance:' + str(distance))
+        index, distance = get_action(update.message.text)
+        if distance >= 0.01 * (100 - confidence):
+            context.bot.send_message(chat_id=update.effective_chat.id, text='Действие не определено')
+        else:
+            text = action_answers[actions[index]](update, context)
+            context.bot.send_message(chat_id=update.effective_chat.id, text=text + '\ndistance:' + str(distance))
 
 text_handler = MessageHandler(Filters.text & (~Filters.command), text)

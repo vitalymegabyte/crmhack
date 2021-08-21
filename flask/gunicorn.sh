@@ -1,2 +1,2 @@
 #!/bin/sh
-gunicorn --reload --chdir app app:app -w 2 --threads 2 -b 0.0.0.0:80
+gunicorn --reload --chdir app app:app -b 0.0.0.0:80
