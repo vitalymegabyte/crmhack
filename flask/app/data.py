@@ -68,6 +68,9 @@ class Data():
     fast_commands = {}
     last_fast_commands_id = 0
     keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Отвественное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+    last_session_id = 1
+    sessions = {}
+
 
 class Session():
     def __init__(self, className):
