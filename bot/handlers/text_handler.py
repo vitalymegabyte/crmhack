@@ -4,6 +4,7 @@ import torch
 import scipy.spatial.distance as ds
 import numpy as np
 import requests
+import re
 from utils import get_clients
 
 sbert = BertModel.from_pretrained('sberbank-ai/ruBert-base', output_attentions=False, output_hidden_states=False)
@@ -16,7 +17,15 @@ def _ping_backend(update, context):
 
 def _create_deal(update, context):
     user = update.message.from_user
-    data = get_clients(user['id'], update.message.text)
+    text = update.message.text
+    data = get_clients(user['id'], text)
+    sum = re.search(r' (\d+) ', text)
+    if not sum:
+        sum = re.search(r' (\d+)$', text)
+    if sum != None:
+        sum = int(sum.group(0))
+        return [str(data), sum]
+    
     return str(data)
 
 actions = ['Создай сделку']
