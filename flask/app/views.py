@@ -72,13 +72,16 @@ def contact(contact_id):
 def fast(id):
     id = int(id)
     print('fast', flush=True)
+    print(Data.fast_commands, flush=True)
     if request.method == 'GET':
         client = Data.fast_commands[id]
         if client is None:
             return 404, ""
         else:
-            return jsonify(client.get_dict())
+            return jsonify(client)
     else:
         Data.last_fast_commands_id += 1
         Data.fast_commands[Data.last_fast_commands_id] = request.json
+        print('json', request.json)
+        print(Data.fast_commands)
         return str(Data.last_fast_commands_id)
