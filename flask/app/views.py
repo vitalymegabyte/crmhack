@@ -50,7 +50,7 @@ def deal(deal_id):
         stonks = data.get('sum')
         if not (stonks is None):
             stonks = int(stonks)
-        Data.deals[Data.last_deal_ID] = Deal(id, name, company, stonks=stonks)
+        Data.deals[id] = Deal(id, name, company, stonks=stonks)
         return jsonify(Data.deals[id].get_dict())
         
 @app.route('/contact/<contact_id>', methods=['GET', 'POST'])
@@ -70,14 +70,15 @@ def contact(contact_id):
 
 @app.route('/fast/<id>', methods=['GET', 'POST'])
 def fast(id):
+    print('fast', flush=True)
     if request.method == 'GET':
-        client = Data.fast_commands(id)
+        client = Data.fast_commands[id]
         if client is None:
             return 404, ""
         else:
             return jsonify(client.get_dict())
     else:
-        print(request.json)
+        print(request.json, flush=True)
         Data.last_fast_commands_id += 1
         Data.fast_commands[Data.last_fast_commands_id] = request.json
-        return Data.last_fast_commands_id
+        return str(Data.last_fast_commands_id)
