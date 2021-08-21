@@ -1,13 +1,20 @@
 import re
 from pymorphy2 import utils
 from utils import lemmatize_text
+from datetime import date
 
 class Deal():
     def create_from_session(session):
         deal = Deal(None, None, None)
         for key in session.data.keys():
             setattr(deal, key, session.data[key])
-        return deal()
+        if deal.name is None:
+            if deal.date is None:
+                deal.name =  deal.company + ' от ' + date.strftime("%d %B %Y %I:%M")
+            else:
+                deal.name = deal.company + ' к ' + deal.date
+
+        return deal
 
     def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=False, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
         self.id = id
