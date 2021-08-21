@@ -27,6 +27,7 @@ def _create_deal(update, context):
         sum = int(sum.group(0))
     deal = {'name': 'Сделка с ' + client['name'], 'company': client, 'sum': sum}
     request = requests.post('http://backend/deal/0', json=deal)
+    #fast = requests.post('http://backend/fast/0', json={'fast': 'fast'})
     return str(request.json())
 
 actions = ['Создай сделку']
@@ -64,7 +65,7 @@ actions_tokenized = list(map(get_vector, actions))
 
 def text(update, context):
     index = get_action(update.message.text)
-    text = f'Текст: "{update.message.text}"\n\nПо смыслу наиболее близок к {actions[index]}\n\nПолный список распознаваемых сообщений: {actions}\n\nAnswer: {action_answers[actions[index]](update, context)}'
+    text = action_answers[actions[index]](update, context)
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 text_handler = MessageHandler(Filters.text & (~Filters.command), text)

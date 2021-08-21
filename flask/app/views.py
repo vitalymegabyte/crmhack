@@ -79,6 +79,7 @@ def fast(id):
         else:
             return jsonify(client.__dict__())
     else:
+        print(request.json)
         Data.last_fast_commands_id += 1
         Data.fast_commands[Data.last_fast_commands_id] = request.json
         return Data.last_fast_commands_id

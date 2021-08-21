@@ -16,6 +16,4 @@ def fast_command(update, context):
         requests.getattr(data(i['method']))(i['url'], json=i.get('json'))
     context.bot_send_message(chat_id=update.effective_chat.id, text=data)
 
-
-
 fast_command_handler = MessageHandler(Filters.text, fast_command)
