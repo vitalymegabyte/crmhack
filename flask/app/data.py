@@ -1,3 +1,5 @@
+from _typeshed import Self
+from flask.app.views import deal
 from os import remove
 import re
 from pymorphy2 import utils
@@ -5,7 +7,11 @@ from utils import lemmatize_text
 
 class Deal():
     def create_from_session(session):
-        return Deal()
+        deal = Deal(None, None, None)
+        for key in session.data.keys():
+            setattr(deal, key, session.data[key])
+        return deal()
+
     def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=False, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
         self.id = id
         self.name = name
