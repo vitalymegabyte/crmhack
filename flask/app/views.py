@@ -15,7 +15,7 @@ def get_clients(client_id):
     data = request.json
     text = data['text']
     clients_got = getObjectsFromText(text, Data.clients.values())
-    clients_got = list(map(lambda obj: obj.__dict__(), clients_got))
+    clients_got = list(map(lambda obj: obj.get_dict(), clients_got))
     return jsonify(clients_got)
 
 @app.route('/client/<client_id>', methods=['GET', 'POST'])
@@ -40,7 +40,7 @@ def deal(deal_id):
         if deal is None:
             return 404, ""
         else:
-            return jsonify(deal.__dict__())
+            return jsonify(deal.get_dict())
     else:
         data = request.json
         Data.last_deal_ID += 1
@@ -51,9 +51,7 @@ def deal(deal_id):
         if not (stonks is None):
             stonks = int(stonks)
         Data.deals[Data.last_deal_ID] = Deal(id, name, company, stonks=stonks)
-        print(Data.last_deal_ID)
-        print(Data.deals)
-        return jsonify(Data.deals[id].__dict__())
+        return jsonify(Data.deals[id].get_dict())
         
 @app.route('/contact/<contact_id>', methods=['GET', 'POST'])
 def contact(contact_id):
@@ -77,7 +75,7 @@ def fast(id):
         if client is None:
             return 404, ""
         else:
-            return jsonify(client.__dict__())
+            return jsonify(client.get_dict())
     else:
         print(request.json)
         Data.last_fast_commands_id += 1

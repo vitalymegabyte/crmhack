@@ -10,6 +10,7 @@ from utils import get_clients
 sbert = BertModel.from_pretrained('sberbank-ai/ruBert-base', output_attentions=False, output_hidden_states=False)
 sbert.eval()
 sbert_tokenizer = BertTokenizer.from_pretrained('sberbank-ai/ruBert-base')
+confidence = 0
 
 def _ping_backend(update, context):
     r = requests.get('http://backend/')
@@ -19,6 +20,8 @@ def _create_deal(update, context):
     user = update.message.from_user
     text = update.message.text
     data = get_clients(user['id'], text)
+    if len(data) == 0:
+        return 'Error: no client defined'
     client = data[0]
     sum = re.search(r' (\d+) ', text)
     if not sum:
@@ -59,13 +62,16 @@ def get_action(text):
     vector = get_vector(text)
     distances = [ds.cosine(action_embeddings, vector) for action_embeddings in actions_tokenized]
     index = np.argmin(distances)
-    return index
+    return index, distances[index]
 
 actions_tokenized = list(map(get_vector, actions))
 
 def text(update, context):
-    index = get_action(update.message.text)
-    text = action_answers[actions[index]](update, context)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+    index, distance = get_action(update.message.text)
+    if distance >= 0.01 * (100 - confidence):
+        context.bot.send_message(chat_id=update.effective_chat.id, text='Действие не определено')
+    else:
+        text = action_answers[actions[index]](update, context)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=text + '\ndistance:' + str(distance))
 
 text_handler = MessageHandler(Filters.text & (~Filters.command), text)

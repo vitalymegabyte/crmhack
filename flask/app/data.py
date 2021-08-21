@@ -22,13 +22,13 @@ class Deal():
         self.marja = marja
         self.NDS = NDS
 
-    def __dict__(self):
+    def get_dict(self):
         return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company, 'str': str(self)}
 
     def __str__(self):
         ret = self.name + "\n"
-        ret = ret + 'Компания: ' + self.company + "\n"
-        if self.stonks is not None: ret = ret + "Сумма: " + self.stonks
+        ret = ret + 'Компания: ' + str(self.company) + "\n"
+        if self.stonks is not None: ret = ret + "Сумма: " + str(self.stonks)
         return ret
 
 
@@ -38,7 +38,7 @@ class Client():
         self.name = name
         self.normalized_name = lemmatize_text(name)
     
-    def __dict__(self):
+    def get_dict(self):
         return {'id': self.id, 'name': self.name, 'str': str(self)}
 
     def __str__(self):
@@ -51,10 +51,10 @@ class Contact():
         self.phone_number = phone_number
         self.email = email
         self.normalized_name = lemmatize_text(name)
-    def __dict__(self):
+    def get_dict(self):
         return {'name': self.name}
 
-    def __dict__(self):
+    def get_dict(self):
         return {'id': self.id, 'name': self.name}
 
 class Data():
