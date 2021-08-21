@@ -40,15 +40,20 @@ def deal(deal_id):
         if deal is None:
             return 404, ""
         else:
-            return jsonify(deal)
+            return jsonify(deal.__dict__())
     else:
         data = request.json
         Data.last_deal_ID += 1
         id = Data.last_deal_ID
         name = data['name']
-        deal_id = data['deal_id']
         company = data['company']
-        Data.deals[Data.last_deal_ID] = Deal(id, name, company)
+        stonks = data.get('sum')
+        if not (stonks is None):
+            stonks = int(stonks)
+        Data.deals[Data.last_deal_ID] = Deal(id, name, company, stonks=stonks)
+        print(Data.last_deal_ID)
+        print(Data.deals)
+        return jsonify(Data.deals[id].__dict__())
         
 @app.route('/contact/<contact_id>', methods=['GET', 'POST'])
 def contact(contact_id):

@@ -23,7 +23,7 @@ class Deal():
         self.NDS = NDS
 
     def __dict__(self):
-        return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company}
+        return {'name': self.name, 'id': self.id, 'company': self.company, 'sum': self.stonks}
 
 
 class Client():

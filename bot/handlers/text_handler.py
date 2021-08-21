@@ -19,14 +19,15 @@ def _create_deal(update, context):
     user = update.message.from_user
     text = update.message.text
     data = get_clients(user['id'], text)
+    client = data[0]
     sum = re.search(r' (\d+) ', text)
     if not sum:
         sum = re.search(r' (\d+)$', text)
     if sum != None:
         sum = int(sum.group(0))
-        return [str(data), sum]
-    
-    return str(data)
+    deal = {'name': 'Сделка с ' + client['name'], 'company': client, 'sum': sum}
+    request = requests.post('http://backend/deal/0', json=deal)
+    return str(request.json())
 
 actions = ['Создай сделку']
 actions_tokenized = []
