@@ -1,2 +1,3 @@
-#id => client
-clients = {'T1 Консалтинг': 'T1 Консалтинг'}
+class Deal():
+    def __init__(self, name):
+        pass

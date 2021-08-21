@@ -15,7 +15,9 @@ def _ping_backend(update, context):
 
 def _create_deal(update, context):
     user = update.message.from_user
-    r = requests.get('http://backend/get_clients/' + user['id'])
+    r = requests.get('http://backend/get_clients/' + str(user['id']), json={'text': update.message})
+    data = r.json()
+    return str(data)
 
 actions = ['Пингануть бэкенд', 'Создай сделку']
 actions_tokenized = []
