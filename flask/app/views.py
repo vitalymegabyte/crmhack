@@ -2,7 +2,7 @@ from operator import methodcaller
 from os import name
 from flask import request, jsonify
 from app import app
-from flask.app import data
+from app import data
 from utils import getObjectsFromText
 from data import Client, Contact, Data, Deal
 
@@ -15,6 +15,7 @@ def get_clients(client_id):
     data = request.json
     text = data['text']
     clients_got = getObjectsFromText(text, Data.clients.values())
+    clients_got = list(filter(lambda c: c.normalized_name, clients_got))
     return jsonify(clients_got)
 
 @app.route('/client/<client_id>', methods=['GET', 'POST'])

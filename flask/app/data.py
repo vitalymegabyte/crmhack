@@ -21,6 +21,8 @@ class Deal():
         self.CK = CK #ЦК Сделки
         self.marja = marja
         self.NDS = NDS
+    def __dict__(self):
+        return {'name': self.name}
 
 
 class Client():
@@ -44,3 +46,6 @@ class Data():
     last_contact_ID = 0
     last_deal_ID = 0
     last_client_ID = 0
+
+Data.clients[Data.last_client_ID] = Client(Data.last_client_ID, 'T1 Консалтинг')
+Data.last_client_ID += 1

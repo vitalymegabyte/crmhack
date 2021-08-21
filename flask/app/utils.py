@@ -16,6 +16,7 @@ def lemmatize_text(text):
 
 #объект должен иметь поле normalized_name
 def getObjectsFromText(text, all_objects):
+    print(all_objects)
     dict_of_objects = dict(map(lambda obj: (obj.normalized_name, obj), all_objects))
     normalized_text = normalize_text(text)
     objects_to_return = []
