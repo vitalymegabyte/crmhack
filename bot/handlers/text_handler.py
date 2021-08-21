@@ -32,6 +32,7 @@ def _create_deal(update, context):
     request = requests.post('http://backend/deal/0', json=deal)
     fast_action = {'queries': [{'url': 'http://backend/deal/0', 'method': 'post', 'json': deal}], 'text': 'Сделка зарегистрирована!'}
     fast = requests.post('http://backend/fast/0', json=fast_action)
+    print(request.json(), flush=True)
     return 'Данные сделки:\n' + request.json()['str'] + '\nЗарегистрировать сделку: /fast' + fast.content.decode('utf-8')
 
 actions = ['Создай сделку']
@@ -78,6 +79,6 @@ def text(update, context):
             context.bot.send_message(chat_id=update.effective_chat.id, text='Действие не определено')
         else:
             text = action_answers[actions[index]](update, context)
-            context.bot.send_message(chat_id=update.effective_chat.id, text=text + '\ndistance:' + str(distance))
+            context.bot.send_message(chat_id=update.effective_chat.id, text=text + '\ndistance:' + str(distance), parse_mode='HTML')
 
 text_handler = MessageHandler(Filters.text & (~Filters.command), text)

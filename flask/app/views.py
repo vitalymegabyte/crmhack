@@ -50,7 +50,7 @@ def deal(deal_id):
         stonks = data.get('sum')
         if not (stonks is None):
             stonks = int(stonks)
-        Data.deals[id] = Deal(id, name, company, stonks=stonks)
+        Data.deals[id] = Deal(id, name, company['str'], stonks=stonks)
         return jsonify(Data.deals[id].get_dict())
         
 @app.route('/contact/<contact_id>', methods=['GET', 'POST'])

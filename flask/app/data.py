@@ -4,7 +4,9 @@ from pymorphy2 import utils
 from utils import lemmatize_text
 
 class Deal():
-    def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=True, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
+    def create_from_session(session):
+        return Deal()
+    def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=False, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
         self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
@@ -28,24 +30,24 @@ class Deal():
         return {'name': self.name, 'id': self.id, 'deal_id': self.deal_id, 'company': self.company, 'str': str(self)}
 
     def __str__(self):
-        ret = "Сделка: **\"" + self.name + "\"**\n"
+        ret = "Сделка: <b>\"" + self.name + "\"</b>\n"
         if self.status == True:
-            ret = ret + "Статус: закрыта ✅\n\n"
+            ret = ret + "Статус: ✅закрыта \n\n"
         else:
-            ret = ret + "Статус: закрыта ⏰\n\n"
-        ret = ret + "Компания: **\"" + self.company + "\"**\n"
-        if self.type is not None: ret = ret + self.type
-        if self.orderer is not None: ret = ret + "Конечный заказчик: " + self.orderer + "\"\n"
-        if self.stonksNDS is not None: ret = ret + "Ожидаемая прибыль с НДС: **" + self.stonksNDS + " " + self.currency + "**\n"
-        if self.currency is not None: ret = ret + " " + self.currency + "**\n"
-        else: "**\n"
-        if self.stonks is not None: ret = ret + "Ожидаемая прибыль без НДС: " + self.stonks
-        if self.currency is not None: ret = ret + " " + self.currency + "**\n"
-        else: "**\n"
-        if self.probability is not None: ret = ret + "Вероятность продавца: " + self.probability + "\n"
-        if self.marja is not None: ret = ret + "Оценочная маржинальность: " + self.marja + "\n"
-        if self.date is not None: ret = ret + "Вероятная дата заключения: **" + self.date + "**\n\n"
-        if self.responcible is not None: ret = ret + "Ответственное лицо: **" + self.responcible + "**"
+            ret = ret + "Статус: ⏰открыта \n\n"
+        ret = ret + "Компания: <b>\"" + str(self.company) + "\"</b>\n"
+        if self.type is not None: ret = ret + str(self.type)
+        if self.orderer is not None: ret = ret + "Конечный заказчик: " + str(self.orderer) + "\"\n"
+        if self.stonksNDS is not None: ret = ret + "Ожидаемая прибыль с НДС: <b>" + str(self.stonksNDS)
+        if self.currency is not None: ret = ret + " " + str(self.currency) + "</b>\n"
+        else: "</b>\n"
+        if self.stonks is not None: ret = ret + "Ожидаемая прибыль без НДС: <i>" + str(self.stonks)
+        if self.currency is not None: ret = ret + " " + str(self.currency) + "</i>\n"
+        else: ret = ret + "</i>\n"
+        if self.probability is not None: ret = ret + "Вероятность продавца: <i>" + str(self.probability) + "</i>\n"
+        if self.marja is not None: ret = ret + "Оценочная маржинальность: <i>" + str(self.marja) + "</i>\n"
+        if self.date is not None: ret = ret + "Вероятная дата заключения: <b>" + str(self.date) + "</b>\n\n"
+        if self.responcible is not None: ret = ret + "Ответственное лицо: <b>" + str(self.responcible) + "</b>"
         return ret
 
 
