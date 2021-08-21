@@ -11,5 +11,6 @@ def home():
 def get_clients(client_id):
     data = request.json
     text = data['text']
-    clients_got = getObjectsFromText(text, clients)
+    clients_got = getObjectsFromText(text, clients.values())
+    clients_got = list(map(lambda c: c.name, clients_got))
     return jsonify(clients_got)

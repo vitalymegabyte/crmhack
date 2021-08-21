@@ -4,7 +4,7 @@ import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
 
 def normal_form(word):
-    return morph.parse(word)[0].normalized
+    return morph.parse(word)[0].normal_form
 
 def normalize_text(text):
     text_beaten = text.split(' ')
@@ -20,8 +20,9 @@ def getObjectsFromText(text, all_objects):
     normalized_text = normalize_text(text)
     objects_to_return = []
     for i in range(1, len(normalized_text)):
-        for j in range(len(normalized_text) - i):
-            name_done = ' '.join(normalized_text)
+        for j in range(len(normalized_text) - i + 1):
+            name_done = ' '.join(normalized_text[j:j+i])
+            print(name_done, flush=True)
             if name_done in dict_of_objects:
                 objects_to_return.append(dict_of_objects[name_done])
     return objects_to_return
