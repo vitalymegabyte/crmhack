@@ -64,3 +64,16 @@ def contact(contact_id):
         id = Data.last_contact_ID
         name = data['name']
         Data.contacts[Data.last_contact_ID] = Contact(id, name)
+
+@app.route('/fast/<id>', methods=['GET', 'POST'])
+def client(id):
+    if request.method == 'GET':
+        client = Data.fast_commands(id)
+        if client is None:
+            return 404, ""
+        else:
+            return jsonify(client.__dict__())
+    else:
+        Data.last_fast_commands_id += 1
+        Data.fast_commands[Data.last_fast_commands_id] = request.json
+        return Data.last_fast_commands_id
