@@ -31,8 +31,9 @@ class Client():
         self.id = id
         self.name = name
         self.normalized_name = lemmatize_text(name)
+    
     def __dict__(self):
-        return {'name': self.name}
+        return {'id': self.id, 'name': self.name}
 
 class Contact():
     def __init__(self, id, name, phone_number=None, email=None):

@@ -16,14 +16,12 @@ def lemmatize_text(text):
 
 #объект должен иметь поле normalized_name
 def getObjectsFromText(text, all_objects):
-    print(all_objects)
     dict_of_objects = dict(map(lambda obj: (obj.normalized_name, obj), all_objects))
     normalized_text = normalize_text(text)
     objects_to_return = []
     for i in range(1, len(normalized_text)):
         for j in range(len(normalized_text) - i + 1):
             name_done = ' '.join(normalized_text[j:j+i])
-            print(name_done, flush=True)
             if name_done in dict_of_objects:
                 objects_to_return.append(dict_of_objects[name_done])
     return objects_to_return

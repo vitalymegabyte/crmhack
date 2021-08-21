@@ -25,7 +25,7 @@ def client(client_id):
         if client is None:
             return 404, ""
         else:
-            return jsonify(client.__dict__())
+            return jsonify(client)
     else:
         data = request.json
         name = data['name']
@@ -39,7 +39,7 @@ def deal(deal_id):
         if deal is None:
             return 404, ""
         else:
-            return jsonify(deal.__dict__())
+            return jsonify(deal)
     else:
         data = request.json
         id = Data.last_deal_ID =+ 1
@@ -57,7 +57,7 @@ def contact(contact_id):
         if contact is None:
             return 404, ""
         else:
-            return jsonify(contact.__dict__())
+            return jsonify(contact)
     else:
         data = request.json
         id = Data.last_contact_ID =+ 1

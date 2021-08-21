@@ -4,6 +4,7 @@ import torch
 import scipy.spatial.distance as ds
 import numpy as np
 import requests
+from utils import get_clients
 
 sbert = BertModel.from_pretrained('sberbank-ai/ruBert-base', output_attentions=False, output_hidden_states=False)
 sbert.eval()
@@ -15,13 +16,12 @@ def _ping_backend(update, context):
 
 def _create_deal(update, context):
     user = update.message.from_user
-    r = requests.get('http://backend/get_clients/' + str(user['id']), json={'text': update.message.text})
-    data = r.json()
+    data = get_clients(user['id'], update.message.text)
     return str(data)
 
-actions = ['Пингануть бэкенд', 'Создай сделку']
+actions = ['Создай сделку']
 actions_tokenized = []
-action_answers = {'Пингануть бэкенд': _ping_backend, 'Создай сделку': _create_deal}
+action_answers = {'Создай сделку': _create_deal}
 
 
 def _sbert_tokenize_sentence(text):
