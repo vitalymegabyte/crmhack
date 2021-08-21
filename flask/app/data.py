@@ -9,7 +9,9 @@ class Deal():
         for key in session.data.keys():
             setattr(deal, key, session.data[key])
         if deal.name is None:
-            if deal.date is None:
+            if deal.date is None and deal.company is None:
+                deal.name = 'Без названия от ' + date.strftime("%d %B %Y %I:%M")
+            elif deal.date is None:
                 deal.name =  deal.company + ' от ' + date.strftime("%d %B %Y %I:%M")
             else:
                 deal.name = deal.company + ' к ' + deal.date
@@ -45,7 +47,8 @@ class Deal():
             ret = ret + "Статус: ✅закрыта \n\n"
         else:
             ret = ret + "Статус: ⏰открыта \n\n"
-        ret = ret + "Компания: <b>\"" + str(self.company) + "\"</b>\n"
+        if self.company is not None: ret = ret + "Компания: <b>\"" + str(self.company) + "\"</b>\n"
+        else: ret = ret + "не установлена\n"
         if self.type is not None: ret = ret + str(self.type)
         if self.orderer is not None: ret = ret + "Конечный заказчик: " + str(self.orderer) + "\"\n"
         if self.stonksNDS is not None: ret = ret + "Ожидаемая прибыль с НДС: <b>" + str(self.stonksNDS)
