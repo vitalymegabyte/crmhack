@@ -86,30 +86,34 @@ def fast(id):
 
 @app.route('/sessions/<id>', methods=['GET', 'POST'])
 def sessions(id):
+    id = int(id)
     if request.method == 'GET':
-        client = Data.last_session_id[id]
+        client = Data.user_sessions.get(id)
         if client is None:
-            return 404, ""
+            return "",  404
         else:
-            arr = client.not_used_data()        
+            arr = client.not_used_data()
+            print(arr, flush=True)
             return jsonify(arr)
     else:
-        if id in Data.sessions:
+        if id in Data.user_sessions:
             if request.json['name'] == 'closed':
                 session = Data.user_sessions.pop(request.json['telegram_id'])
-                return jsonify(session.data)
+                return str(session)
             else:
                 property = request.json
-                Data.sessions[id][property['name']] = property['value']
+                Data.user_sessions[id][property['name']] = property['value']
+                return str(Data.user_sessions[id])
         else:
             Data.last_session_id +=1
             Data.sessions[Data.last_session_id] = Session(request.json['classname'], id)
             Data.user_sessions[request.json['telegram_id']] = Data.sessions[Data.last_session_id]
-            return Data.last_session_id
+            return str(Data.sessions[Data.last_session_id])
 
 @app.route('/user_sessions/<id>', methods=['GET'])
-def usser_sessions(id):
-    if id in Data.sessions: 
+def user_sessions(id):
+    id = int(id)
+    if id in Data.user_sessions: 
         return 'Active'
     else:
         return 'Inactive'

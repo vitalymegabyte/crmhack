@@ -29,8 +29,8 @@ def _create_deal(update, context):
     if sum != None:
         sum = int(sum.group(0))
     deal = {'name': 'Сделка с ' + client['name'], 'company': client, 'sum': sum}
+    request = requests.post('http://backend/sessions/0', json={'classname': 'Deal', 'telegram_id': user['id']})
     request = requests.post('http://backend/deal/0', json=deal)
-    request = requests.post('http://backend/sessions/0', json={'classname': 'Deal'})
     fast_action = {'queries': [{'url': 'http://backend/deal/0', 'method': 'post', 'json': deal}], 'text': 'Сделка зарегистрирована!'}
     fast = requests.post('http://backend/fast/0', json=fast_action)
     return 'Данные сделки:\n' + request.json()['str'] + '\nЗарегистрировать сделку: /fast' + fast.content.decode('utf-8')
@@ -72,7 +72,7 @@ def text(update, context):
     request = requests.get('http://backend/user_sessions/' + str(update.message.from_user.id))
     active_sessions = request.content.decode('utf-8')
     if active_sessions == 'Active':
-        pass
+        request = requests.get('http://backend/sessions/' + str(update.message.from_user.id))
     else:
         index, distance = get_action(update.message.text)
         if distance >= 0.01 * (100 - confidence):

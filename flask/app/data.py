@@ -1,6 +1,3 @@
-from _typeshed import Self
-from flask.app.views import deal
-from os import remove
 import re
 from pymorphy2 import utils
 from utils import lemmatize_text
@@ -109,6 +106,7 @@ class Data():
 
 
 class Session():
+    classes = {'Deal': Deal}
     def __init__(self, className, id):
         self.className = className
         self.data = {}
@@ -119,8 +117,12 @@ class Session():
         for key in self.data.keys():
             if key in not_used.keys():
                 del not_used[key]
-        return not_used
-            
+        return list(not_used)
+    
+    def __str__(self):
+        str_maker = Session.classes[self.className]
+        return str(str_maker)
+    
 
 
 
