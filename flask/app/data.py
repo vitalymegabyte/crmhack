@@ -100,6 +100,7 @@ class Data():
     fast_commands = {}
     last_fast_commands_id = 0
     keywords = {"Имя": 'name','Сумма': 'stonks', 'Ответственное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+    currencies = {"доллар": "USD", "бакс": "USD", "dollar": "USD", "dolar": "USD", "USD": "USD", "зелень": "USD", "вечно-зеленый": "USD", "бачинский": "USD", "долар": "USD", "евро": "EUR", "еврос": "EUR","евровалюта": "EUR", "EUR": "EUR", "евробакс": "EUR", "рубль": "RUB", "RUB": "RUB", "деревяный": "RUB", "деревянный": "RUB"}
     last_session_id = 1
     sessions = {}
     user_sessions = {}

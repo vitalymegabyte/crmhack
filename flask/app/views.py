@@ -121,3 +121,8 @@ def user_sessions(id):
         return 'Active'
     else:
         return 'Inactive'
+
+@app.route('/active_deals', methods=['GET'])
+def active_deals():
+    arr = [str(deal) for deal in Data.deals.values()]
+    return jsonify(arr)

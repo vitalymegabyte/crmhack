@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from telegram.ext import MessageHandler, Filters
 from transformers import BertModel, BertTokenizer
 import torch
@@ -42,11 +43,17 @@ def _create_deal(update, context):
     return 'Данные сделки:\n' + request.json()['str']
 
 def _current_deal(update, context):
-    return 'Активные сделки'
+    request = requests.get('http://backend/active_deals')
+    data = request.json()
+    text = '<b>Текущие сделки</b>\n\n'
+    for d in data:
+        text += d
+        text += '\n'
+    return text
 
-actions = ['Создай сделку', 'Активные сделки']
+actions = ['Создай сделку', 'Текущие сделки']
 actions_tokenized = []
-action_answers = {'Создай сделку': _create_deal, 'Активные сделки': _current_deal}
+action_answers = {'Создай сделку': _create_deal, 'Текущие сделки': _current_deal}
 
 
 def _sbert_tokenize_sentence(text):
@@ -119,7 +126,7 @@ def text(update, context):
             context.bot.send_message(chat_id=update.effective_chat.id, text='Действие не определено')
         else:
             text = action_answers[actions[index]](update, context)
-            answer = text + '\ndistance:' + str(distance)
+            answer = text
             context.bot.send_message(chat_id=update.effective_chat.id, text=answer, parse_mode='HTML')
 
 text_handler = MessageHandler(Filters.text & (~Filters.command), text)
