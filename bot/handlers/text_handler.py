@@ -45,11 +45,13 @@ def _create_deal(update, context):
 def _current_deal(update, context):
     request = requests.get('http://backend/active_deals')
     data = request.json()
-    text = '<b>Текущие сделки</b>\n\n'
-    for d in data:
-        text += d
-        text += '\n'
-    return text
+    if len(data) == 0:
+        return "<b>Сделок нет</b>"
+    else:
+        context.bot.send_message(chat_id=update.effective_chat.id, text='<b>Текущие сделки</b>', parse_mode='HTML')
+        for d in data:
+            context.bot.send_message(chat_id=update.effective_chat.id, text=d, parse_mode='HTML')
+    return ''
 
 actions = ['Создай сделку', 'Текущие сделки']
 actions_tokenized = []
