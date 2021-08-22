@@ -1,7 +1,7 @@
 import re
 from pymorphy2 import utils
 from utils import lemmatize_text
-from datetime import date
+from datetime import date, datetime
 
 class Deal():
     def create_from_session(session):
@@ -10,9 +10,9 @@ class Deal():
             setattr(deal, key, session.data[key])
         if deal.name is None:
             if deal.date is None and deal.company is None:
-                deal.name = 'Без названия от ' + date.strftime("%d %B %Y %I:%M")
+                deal.name = 'Без названия от ' + datetime.now().strftime("%d %B %Y %I:%M")
             elif deal.date is None:
-                deal.name =  deal.company + ' от ' + date.strftime("%d %B %Y %I:%M")
+                deal.name =  deal.company + ' от ' + datetime.now().strftime("%d %B %Y %I:%M")
             else:
                 deal.name = deal.company + ' к ' + deal.date
 
@@ -21,7 +21,10 @@ class Deal():
     def __init__(self, id, name, company, deal_id=None, stonksNDS=None, stonks=None, status=False, responcible=None, war=True, currency=None, type=None, date=None, probability=None, orderer=None, CK=None, marja=None, NDS=True):
         self.id = id
         self.name = name
-        self.normalized_name = lemmatize_text(name)
+        if self.name is None:
+            self.normalized_name = None
+        else:
+            self.normalized_name = lemmatize_text(name)
         self.deal_id = deal_id
         self.stonksNDS = stonksNDS
         self.stonks = stonks
@@ -48,15 +51,13 @@ class Deal():
         else:
             ret = ret + "Статус: ⏰открыта \n\n"
         if self.company is not None: ret = ret + "Компания: <b>\"" + str(self.company) + "\"</b>\n"
-        else: ret = ret + "не установлена\n"
+        else: ret = ret + "Компания: <b> не установлена </b>\n"
         if self.type is not None: ret = ret + str(self.type)
         if self.orderer is not None: ret = ret + "Конечный заказчик: " + str(self.orderer) + "\"\n"
-        if self.stonksNDS is not None: ret = ret + "Ожидаемая прибыль с НДС: <b>" + str(self.stonksNDS)
-        if self.currency is not None: ret = ret + " " + str(self.currency) + "</b>\n"
-        else: "</b>\n"
-        if self.stonks is not None: ret = ret + "Ожидаемая прибыль без НДС: <i>" + str(self.stonks)
-        if self.currency is not None: ret = ret + " " + str(self.currency) + "</i>\n"
-        else: ret = ret + "</i>\n"
+        if self.stonks is not None: 
+            ret = ret + "Ожидаемая прибыль без НДС: <i>" + str(self.stonks)
+            if self.currency is not None: ret = ret + " " + str(self.currency) + "</i>\n"
+            else: ret = ret + "</i>\n"
         if self.probability is not None: ret = ret + "Вероятность продавца: <i>" + str(self.probability) + "</i>\n"
         if self.marja is not None: ret = ret + "Оценочная маржинальность: <i>" + str(self.marja) + "</i>\n"
         if self.date is not None: ret = ret + "Вероятная дата заключения: <b>" + str(self.date) + "</b>\n\n"
@@ -98,7 +99,7 @@ class Data():
     last_client_ID = 0
     fast_commands = {}
     last_fast_commands_id = 0
-    keywords = {"Имя": 'name','Ожидаемая выручка': 'stonks', 'Отвественное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
+    keywords = {"Имя": 'name','Сумма': 'stonks', 'Ответственное лицо': 'responcible', 'Валюта': 'currency', 'Тип сделки': 'type', 'Компания': 'company', 'Дата заключения': 'date', 'Конечный заказчик': 'orderer', 'Оценочная маржинальность': 'marja'}
     last_session_id = 1
     sessions = {}
     user_sessions = {}
@@ -106,21 +107,22 @@ class Data():
 
 class Session():
     classes = {'Deal': Deal}
-    def __init__(self, className, id):
+    def __init__(self, className, id, fast_action):
         self.className = className
         self.data = {}
         self.id = id
+        self.fast_action = fast_action
     
     def not_used_data(self):
-        not_used = Data.keywords.keys()
+        not_used = list(Data.keywords.keys())
         for key in self.data.keys():
-            if key in not_used.keys():
+            if key in not_used:
                 del not_used[key]
         return list(not_used)
     
     def __str__(self):
-        str_maker = Session.classes[self.className]
-        return str(str_maker)
+        str_maker = Session.classes[self.className].create_from_session(self)
+        return str(str_maker) + '\nЗарегистрировать сделку: /fast' + self.fast_action
     
 
 

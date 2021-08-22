@@ -93,22 +93,26 @@ def sessions(id):
             return "",  404
         else:
             arr = client.not_used_data()
-            print(arr, flush=True)
+            print(id, arr, flush=True)
             return jsonify(arr)
     else:
         if id in Data.user_sessions:
             if request.json['name'] == 'closed':
                 session = Data.user_sessions.pop(request.json['telegram_id'])
-                return str(session)
+                Data.last_deal_ID += 1
+                Data.deals[Data.last_deal_ID] = Deal.create_from_session(session)
+                print('Сделка добавлена. Общий массив сделок:', Data.deals)
+
+                return jsonify({'str': str(session)})
             else:
                 property = request.json
-                Data.user_sessions[id][property['name']] = property['value']
-                return str(Data.user_sessions[id])
+                property_name = Data.keywords[property['name']]
+                Data.user_sessions[id].data[property_name] = property['value']
+                print('id', id, 'json', str(Data.user_sessions[id]), 'data', Data.user_sessions[id].data)
+                return jsonify({'str': str(Data.user_sessions[id])})
         else:
-            Data.last_session_id +=1
-            Data.sessions[Data.last_session_id] = Session(request.json['classname'], id)
-            Data.user_sessions[request.json['telegram_id']] = Data.sessions[Data.last_session_id]
-            return str(Data.sessions[Data.last_session_id])
+            Data.user_sessions[request.json['telegram_id']] = Session(request.json['classname'], id, request.json['fast_action'])
+            return jsonify({'str': str(Data.user_sessions[request.json['telegram_id']])})
 
 @app.route('/user_sessions/<id>', methods=['GET'])
 def user_sessions(id):

@@ -5,7 +5,6 @@ from telegram.ext import MessageHandler, Filters
 from telegram.ext.filters import DataDict
 
 def fast_command(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text='all_text:' + update.message.text)
     text = update.message.text
     text = text[5:]
     url = "http://backend/fast/" + text
