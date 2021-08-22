@@ -72,7 +72,7 @@ def text(update, context):
     request = requests.get('http://backend/user_sessions/' + str(update.message.from_user.id))
     active_sessions = request.content.decode('utf-8')
     if active_sessions == 'Active':
-        print('SESSION!!!', flush=True)
+        request = requests.get('http://backend/sessions/' + str(update.message.from_user.id))
     else:
         index, distance = get_action(update.message.text)
         if distance >= 0.01 * (100 - confidence):
