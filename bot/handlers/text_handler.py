@@ -11,7 +11,7 @@ from utils import get_clients
 sbert = BertModel.from_pretrained('sberbank-ai/ruBert-base', output_attentions=False, output_hidden_states=False)
 sbert.eval()
 sbert_tokenizer = BertTokenizer.from_pretrained('sberbank-ai/ruBert-base')
-confidence = 90
+confidence = 80
 
 def _ping_backend(update, context):
     r = requests.get('http://backend/')
